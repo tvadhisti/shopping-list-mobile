@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_list/widgets/shop_card.dart';
+import 'package:shopping_list/widgets/left_drawer.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
@@ -25,7 +27,10 @@ class MyHomePage extends StatelessWidget {
         title: const Text(
           'Shopping List',
         ),
+        backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
       ),
+      drawer: const LeftDrawer(),
       body: SingleChildScrollView(
         // Scrolling wrapper widget
         child: Padding(
@@ -79,11 +84,16 @@ class ShopCard extends StatelessWidget {
       child: InkWell(
         // Responsive touch area
         onTap: () {
-          // Show a SnackBar when clicked
+          // Show SnackBar when clicked
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(
                 content: Text("You pressed the ${item.name} button!")));
+
+          // Navigate to the appropriate route (depending on the button type)
+          if (item.name == "Add Product") {
+            // TODO: Use Navigator.push to navigate to a MaterialPageRoute that encompasses ShopFormPage.
+          }
         },
         child: Container(
           // Container to hold Icon and Text
