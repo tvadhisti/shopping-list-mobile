@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shopping_list/screens/menu.dart';
 import 'package:shopping_list/screens/shoplist_form.dart';
 
-
 class ShopCard extends StatelessWidget {
   final ShopItem item;
 
@@ -23,7 +22,11 @@ class ShopCard extends StatelessWidget {
 
           // Navigate to the appropriate route (depending on the button type)
           if (item.name == "Add Product") {
-            // TODO: Use Navigator.push to navigate to a MaterialPageRoute that encompasses ShopFormPage.
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => ShopFormPage()),
+            );
+            // DONE TODO: Use Navigator.push to navigate to a MaterialPageRoute that encompasses ShopFormPage.
           }
         },
         child: Container(
