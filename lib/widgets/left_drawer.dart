@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/screens/menu.dart';
-// DONE TODO: Import the ShopFormPage page here
+import 'package:shopping_list/screens/list_product.dart';
 import 'package:shopping_list/screens/shoplist_form.dart';
-
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -14,7 +13,7 @@ class LeftDrawer extends StatelessWidget {
         children: [
           const DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.indigo,
+              color: Color.fromARGB(255, 33, 150, 234),
             ),
             child: Column(
               children: [
@@ -28,15 +27,15 @@ class LeftDrawer extends StatelessWidget {
                   ),
                 ),
                 Padding(padding: EdgeInsets.all(10)),
-                Text("Write all your shopping needs here!",
-                    //DONE  TODO: Add a text style with center alignment, font size 15, white color, and regular weight
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.white,
-                    ),
+                Text(
+                  "Write all your shopping needs here!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white,
                   ),
+                ),
               ],
             ),
           ),
@@ -46,11 +45,11 @@ class LeftDrawer extends StatelessWidget {
             // redirect to MyHomePage
             onTap: () {
               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MyHomePage(),
-                  ),
-                );
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MyHomePage(),
+                ),
+              );
             },
           ),
           ListTile(
@@ -58,12 +57,19 @@ class LeftDrawer extends StatelessWidget {
             title: const Text('Add Product'),
             // redirect to ShopFormPage
             onTap: () {
-              /*
-              DONE TODO: Create routing to ShopFormPage here
-              */
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => ShopFormPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.shopping_basket),
+            title: const Text('Product List'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProductPage()),
               );
             },
           ),

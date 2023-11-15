@@ -1,4 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:shopping_list/screens/menu.dart';
 import 'package:shopping_list/widgets/left_drawer.dart';
 
 class ShopFormPage extends StatefulWidget {
@@ -16,14 +20,15 @@ class _ShopFormPageState extends State<ShopFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: const Center(
           child: Text(
-            'Add Product Form',
+            'Add New Product Form',
           ),
         ),
-        backgroundColor: Color.fromARGB(255, 98, 128, 177),
+        backgroundColor: Color.fromARGB(255, 33, 150, 234),
         foregroundColor: Colors.white,
       ),
       drawer: const LeftDrawer(),
@@ -76,7 +81,7 @@ class _ShopFormPageState extends State<ShopFormPage> {
                       return "Price cannot be empty!";
                     }
                     if (int.tryParse(value) == null) {
-                      return "Price cannot be empty!";
+                      return "Price must be a number!";
                     }
                     return null;
                   },
@@ -99,7 +104,7 @@ class _ShopFormPageState extends State<ShopFormPage> {
                   },
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return "Description cannot be empty!";
+                      return "Description cannot be empty";
                     }
                     return null;
                   },
@@ -112,36 +117,40 @@ class _ShopFormPageState extends State<ShopFormPage> {
                   child: ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                          Color.fromARGB(255, 98, 128, 177)),
+                          Color.fromARGB(255, 3, 125, 255)),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Product successfully saved'),
-                              content: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Nama: $_name'),
-                                    Text('Price: $_price'),
-                                    Text('Description: $_description'),
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                        // Kirim ke Django dan tunggu respons
+                        // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+                        final response = await request.postJson(
+                            "http://127.0.0.1:8000/create-flutter/",
+                            jsonEncode(<String, String>{
+                              'name': _name,
+                              'price': _price.toString(),
+                              'description': _description,
+                              // : Sesuaikan field data sesuai dengan aplikasimu
+                            }));
+                        if (response['status'] == 'success') {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content:
+                                Text("New product has saved successfully!"),
+                          ));
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MyHomePage(),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  "Something went wrong, please try again."),
+                            ),
+                          );
+                        }
                       }
                     },
                     child: const Text(
